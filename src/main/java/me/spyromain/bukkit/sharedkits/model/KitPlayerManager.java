@@ -66,6 +66,29 @@ public class KitPlayerManager implements ConfigManager {
         return kitPlayers.get(playerUuid);
     }
 
+    public Map<UUID, Map<String, Kit>> getSharedKits(Player player) {
+        return getSharedKits(player.getUniqueId());
+    }
+
+    public Map<UUID, Map<String, Kit>> getSharedKits(UUID playerUuid) {
+        Map<UUID, Map<String, Kit>> sharedKits = new HashMap<UUID, Map<String, Kit>>();
+
+        for (KitPlayer kitPlayer : kitPlayers.values()) {
+            for (Kit kit : kitPlayer.getKits()) {
+                if (!kit.hasSharedPlayer(playerUuid)) {
+                    continue;
+                }
+
+                if (!sharedKits.containsKey(kitPlayer.getPlayerUuid())) {
+                    sharedKits.put(kitPlayer.getPlayerUuid(), new HashMap<String, Kit>());
+                }
+                sharedKits.get(kitPlayer.getPlayerUuid()).put(kit.getName(), kit);
+            }
+        }
+
+        return sharedKits;
+    }
+
     public ItemType getIconOrDefault(Kit kit) {
         if (kit.getIcon().getType() != Material.AIR) {
             return kit.getIcon();

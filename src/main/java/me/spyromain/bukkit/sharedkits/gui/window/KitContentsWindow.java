@@ -85,7 +85,6 @@ public class KitContentsWindow implements GUIWindow {
             else if (event.getSlot() == REMOVE_KIT_SLOT) {
                 guiPlayer.pushWindow(new YesNoWindow(
                     guiPlayer,
-                    "Do you really want to remove the kit?",
                     new Runnable() {
                         @Override
                         public void run() {
@@ -99,11 +98,13 @@ public class KitContentsWindow implements GUIWindow {
                         public void run() {
                             guiPlayer.popWindow();
                         }
-                    }
+                    },
+                    "Remove kit " + kit.getName(),
+                    ChatColor.GRAY + "Do you really want to remove the kit?"
                 ));
             }
             else if (event.getSlot() == SHARE_KIT_SLOT) {
-                guiPlayer.getPlugin().sendMessage(guiPlayer.getPlayer(), "Coming soon...");
+                guiPlayer.pushWindow(new SharedPlayerListWindow(guiPlayer, kit));
             }
         }
     }

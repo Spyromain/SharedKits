@@ -2,12 +2,17 @@ package me.spyromain.bukkit.sharedkits.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -25,12 +30,15 @@ public class Kit implements ConfigurationSerializable {
     private Date creationDate;
     private ItemType icon;
     private ItemStack[] contents;
+    private Set<UUID> sharedPlayers;
+
+    private Set<UUID> requestedSharedPlayers;
 
     public Kit(String name) {
-        this(name, Calendar.getInstance().getTime(), new ItemType(), new ItemStack[KIT_MAX_SIZE]);
+        this(name, Calendar.getInstance().getTime(), new ItemType(), new ItemStack[KIT_MAX_SIZE], new HashSet<UUID>());
     }
 
-    public Kit(String name, Date creationDate, ItemType icon, ItemStack[] contents) {
+    public Kit(String name, Date creationDate, ItemType icon, ItemStack[] contents, Set<UUID> sharedPlayers) {
         this.name = name;
         this.creationDate = creationDate;
         this.icon = icon;
@@ -38,10 +46,9 @@ public class Kit implements ConfigurationSerializable {
             throw new IllegalArgumentException();
         }
         this.contents = contents;
-    }
+        this.sharedPlayers = sharedPlayers;
 
-    public Kit(String name, Kit kit) {
-        this(name, kit.creationDate, kit.icon, kit.contents);
+        requestedSharedPlayers = new HashSet<UUID>();
     }
 
     public String getName() {
@@ -109,6 +116,38 @@ public class Kit implements ConfigurationSerializable {
         throw new IllegalStateException("Kit is full");
     }
 
+    public Set<UUID> getSharedPlayers() {
+        return Collections.unmodifiableSet(sharedPlayers);
+    }
+
+    public boolean hasSharedPlayer(UUID playerUuid) {
+        return sharedPlayers.contains(playerUuid);
+    }
+
+    public void addSharedPlayer(UUID playerUuid) {
+        sharedPlayers.add(playerUuid);
+    }
+
+    public void removeSharedPlayer(UUID playerUuid) {
+        sharedPlayers.remove(playerUuid);
+    }
+
+    public Set<UUID> getRequestedSharedPlayers() {
+        return Collections.unmodifiableSet(requestedSharedPlayers);
+    }
+
+    public boolean hasRequestedSharedPlayer(UUID playerUuid) {
+        return requestedSharedPlayers.contains(playerUuid);
+    }
+
+    public void addRequestedSharedPlayer(UUID playerUuid) {
+        requestedSharedPlayers.add(playerUuid);
+    }
+
+    public void removeRequestedSharedPlayer(UUID playerUuid) {
+        requestedSharedPlayers.remove(playerUuid);
+    }
+
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> values = new LinkedHashMap<String, Object>();
@@ -121,11 +160,25 @@ public class Kit implements ConfigurationSerializable {
         if (last != -1) {
             values.put("contents", Arrays.copyOf(contents, last + 1));
         }
+        if (!sharedPlayers.isEmpty()) {
+            List<String> sharedPlayersList = new ArrayList<String>();
+            for (UUID playerUuid : sharedPlayers) {
+                sharedPlayersList.add(playerUuid.toString());
+            }
+            values.put("shared-players", sharedPlayersList);
+        }
         return values;
     }
 
     @SuppressWarnings("unchecked")
     public static Kit deserialize(Map<String, Object> values) throws ParseException {
+        Set<UUID> sharedPlayers = new HashSet<UUID>();
+        if (values.containsKey("shared-players")) {
+            for (String playerUuid : (List<String>) values.get("shared-players")) {
+                sharedPlayers.add(UUID.fromString(playerUuid));
+            }
+        }
+
         return new Kit(
             (String) values.get("name"),
             values.containsKey("creation-date")
@@ -136,7 +189,8 @@ public class Kit implements ConfigurationSerializable {
                 : new ItemType(),
             values.containsKey("contents")
                 ? ((List<ItemStack>) values.get("contents")).toArray(new ItemStack[KIT_MAX_SIZE])
-                : new ItemStack[KIT_MAX_SIZE]
+                : new ItemStack[KIT_MAX_SIZE],
+            sharedPlayers
         );
     }
 }

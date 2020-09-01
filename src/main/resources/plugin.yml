@@ -1,10 +1,10 @@
-name: SharedKits
-version: 0.1.0
-description: Create and share kits with other players!
+name: ${project.name}
+version: ${project.version}
+description: ${project.description}
 author: Spyromain
 authors: [Xp10d3]
-website: https://dev.bukkit.org/projects/sharedkits
-main: me.spyromain.bukkit.sharedkits.SharedKits
+website: ${project.url}
+main: ${project.groupId}.sharedkits.SharedKits
 
 commands:
   createkit:
@@ -27,10 +27,22 @@ commands:
     description: Opens GUI to manage kits.
     permission: sharedkits.kitgui
     usage: "Usage: /<command>"
+  sharedkit:
+    description: Gives all items from the shared kit.
+    permission: sharedkits.sharedkit
+    usage: "Usage: /<command> <playerName> <sharedKitName>"
   sharekit:
     description: Toggles shared kit requests.
     permission: sharedkits.sharekit.toggle
     usage: "Usage: /<command> <on|off>"
+  acceptkit:
+    description: Accepts shared kit request.
+    permission: sharedkits.acceptkit
+    usage: "Usage: /<command> <playerName> <kitName>"
+  rejectkit:
+    description: Rejects shared kit request.
+    permission: sharedkits.rejectkit
+    usage: "Usage: /<command> <playerName> <kitName>"
   kitblacklist:
     description: Adds item in hand to blacklist.
     permission: sharedkits.blacklist
@@ -51,7 +63,15 @@ permissions:
     default: true
   sharedkits.kitgui:
     default: true
+  sharedkits.sharedkit:
+    default: true
+  sharedkit.sharekit.kit:
+    default: true
   sharedkits.sharekit.toggle:
     default: op
+  sharedkits.acceptkit:
+    default: true
+  sharedkits.rejectkit:
+    default: true
   sharedkits.blacklist:
     default: op

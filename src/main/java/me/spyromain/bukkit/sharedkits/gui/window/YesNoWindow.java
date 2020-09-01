@@ -15,23 +15,25 @@ public class YesNoWindow implements GUIWindow {
     public static final int YES_SLOT = 33;
 
     private final GUIPlayer guiPlayer;
-    private final String question;
     private final String yesAnswer;
     private final String noAnswer;
     private final Runnable yesAction;
     private final Runnable noAction;
+    private final String question;
+    private final String[] questionLore;
 
-    public YesNoWindow(GUIPlayer guiPlayer, String question, Runnable yesAction, Runnable noAction) {
-        this(guiPlayer, question, "Yes", "No", yesAction, noAction);
+    public YesNoWindow(GUIPlayer guiPlayer, Runnable yesAction, Runnable noAction, String question, String... questionLore) {
+        this(guiPlayer, "Yes", "No", yesAction, noAction, question, questionLore);
     }
 
-    public YesNoWindow(GUIPlayer guiPlayer, String question, String yesAnswer, String noAnswer, Runnable yesAction, Runnable noAction) {
+    public YesNoWindow(GUIPlayer guiPlayer, String yesAnswer, String noAnswer, Runnable yesAction, Runnable noAction, String question, String... questionLore) {
         this.guiPlayer = guiPlayer;
-        this.question = question;
         this.yesAnswer = yesAnswer;
         this.noAnswer = noAnswer;
         this.yesAction = yesAction;
         this.noAction = noAction;
+        this.question = question;
+        this.questionLore = questionLore;
     }
 
     @Override
@@ -40,7 +42,8 @@ public class YesNoWindow implements GUIWindow {
 
         inventory.setItem(INFO_SLOT, GUIUtils.newIcon(
             Material.BOOK,
-            question
+            question,
+            questionLore
         ));
         inventory.setItem(NO_SLOT, GUIUtils.newIcon(
             Material.STAINED_CLAY,

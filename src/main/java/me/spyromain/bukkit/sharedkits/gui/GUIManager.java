@@ -36,12 +36,6 @@ public class GUIManager implements Listener {
         guiPlayer.pushWindow(new KitListWindow(guiPlayer));
     }
 
-    public void open(Player player, GUIWindow window) {
-        GUIPlayer guiPlayer = new GUIPlayer(this, player);
-        guiPlayers.put(player.getUniqueId(), guiPlayer);
-        guiPlayer.pushWindow(window);
-    }
-
     public void closeAll() {
         for (GUIPlayer guiPlayer : guiPlayers.values()) {
             guiPlayer.getPlayer().closeInventory();
@@ -53,6 +47,7 @@ public class GUIManager implements Listener {
         for (GUIPlayer guiPlayer : guiPlayers.values()) {
             if (event.getInventory().equals(guiPlayer.getInventory())) {
                 guiPlayer.onInventoryClick(event);
+                break;
             }
         }
     }
@@ -62,6 +57,7 @@ public class GUIManager implements Listener {
         for (GUIPlayer guiPlayer : guiPlayers.values()) {
             if (event.getInventory().equals(guiPlayer.getInventory())) {
                 guiPlayer.onInventoryDrag(event);
+                break;
             }
         }
     }
@@ -73,6 +69,7 @@ public class GUIManager implements Listener {
             if (event.getInventory().equals(guiPlayer.getInventory())) {
                 guiPlayer.onInventoryClose(event);
                 guiPlayers.remove(guiPlayer.getPlayer().getUniqueId());
+                break;
             }
         }
     }

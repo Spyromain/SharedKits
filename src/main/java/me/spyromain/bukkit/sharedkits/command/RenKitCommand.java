@@ -42,7 +42,8 @@ public class RenKitCommand implements CommandExecutor {
             return true;
         }
 
-        Kit newKit = new Kit(newName, kitPlayer.getKit(oldName));
+        Kit oldKit = kitPlayer.getKit(oldName);
+        Kit newKit = new Kit(newName, oldKit.getCreationDate(), oldKit.getIcon(), oldKit.getContents(), oldKit.getSharedPlayers());
         kitPlayer.removeKit(oldName);
         kitPlayer.addKit(newKit);
         plugin.getKitPlayerManager().save();

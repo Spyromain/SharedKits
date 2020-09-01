@@ -39,12 +39,9 @@ final public class ItemType implements Comparable<ItemType>, ConfigurationSerial
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + damage;
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        return result;
+        return (type.getId() << 8) ^ damage;
     }
 
     @Override

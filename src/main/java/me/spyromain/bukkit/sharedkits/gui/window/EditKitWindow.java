@@ -31,13 +31,13 @@ public class EditKitWindow implements GUIWindow {
         "Kit inventory",
         "  Left click " + ChatColor.GRAY + "pick or place items",
         "  Right click " + ChatColor.GRAY + "split or place one item",
-        "  Drop button " + ChatColor.GRAY + "remove one item",
-        "  Drop + CTRL buttons " + ChatColor.GRAY + "remove whole stack",
-        "  Shift button + Right click " + ChatColor.GRAY + "increase stack amount",
+        "  Drop key " + ChatColor.GRAY + "remove one item",
+        "  Drop + Ctrl keys " + ChatColor.GRAY + "remove whole stack",
+        "  Shift key + Right click " + ChatColor.GRAY + "increase stack amount",
         "Player inventory",
         "  Left click " + ChatColor.GRAY + "copy whole stack",
         "  Right click " + ChatColor.GRAY + "copy one item",
-        "  Shift button + Right click " + ChatColor.GRAY + "copy maximum amount"
+        "  Shift key + Right click " + ChatColor.GRAY + "copy maximum amount"
     );
     public static final ItemStack SAVE_ICON = GUIUtils.newIcon(
         Material.STAINED_CLAY,
@@ -118,6 +118,11 @@ public class EditKitWindow implements GUIWindow {
             ItemStack itemOnCursor = guiPlayer.getPlayer().getItemOnCursor();
 
             if (!Utils.isEmpty(clickedItem) && Utils.isEmpty(itemOnCursor)) {
+                if (!guiPlayer.getPlayer().hasPermission("sharedkits.addkit")) {
+                    guiPlayer.getPlugin().sendMessage(guiPlayer.getPlayer(), "You are not allowed to add items to kits.");
+                    return;
+                }
+
                 ItemStack newItem = new ItemStack(clickedItem);
 
                 if (guiPlayer.getPlugin().getKitBlacklistManager().contains(newItem)) {

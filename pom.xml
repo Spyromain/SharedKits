@@ -6,9 +6,10 @@
 
   <groupId>me.spyromain.bukkit</groupId>
   <artifactId>shared-kits</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 
   <name>SharedKits</name>
+  <description>Create and share kits with other players!</description>
   <url>https://dev.bukkit.org/projects/sharedkits</url>
 
   <properties>
@@ -34,18 +35,31 @@
   </dependencies>
 
   <build>
+    <finalName>${project.name}-${project.version}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.2.0</version>
         <configuration>
-          <finalName>${project.name}-${project.version}</finalName>
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
           </archive>
         </configuration>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>plugin.yml</include>
+        </includes>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
   </build>
 </project>

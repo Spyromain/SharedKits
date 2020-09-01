@@ -17,7 +17,7 @@ import me.spyromain.bukkit.sharedkits.model.Kit;
 public class EditIconWindow implements GUIWindow {
     public static final int INFO_SLOT = 13;
     public static final int ICON_SLOT = 31;
-    public static final int BACK_SLOT = 45;
+    public static final int CANCEL_SLOT = 45;
     public static final int REMOVE_ICON_SLOT = 49;
     public static final int SAVE_SLOT = 53;
 
@@ -27,10 +27,10 @@ public class EditIconWindow implements GUIWindow {
         ChatColor.GRAY + "Please select an item in your inventory",
         ChatColor.GRAY + "to use it as icon"
     );
-    public static final ItemStack BACK_ICON = GUIUtils.newIcon(
+    public static final ItemStack CANCEL_ICON = GUIUtils.newIcon(
         Material.STAINED_CLAY,
         (short) 14,
-        "Back"
+        "Cancel"
     );
     public static final ItemStack REMOVE_ICON_ICON = GUIUtils.newIcon(
         Material.TNT,
@@ -65,7 +65,7 @@ public class EditIconWindow implements GUIWindow {
             inventory.setItem(ICON_SLOT, GUIUtils.newIcon(newIcon, "Icon"));
         }
 
-        inventory.setItem(BACK_SLOT, BACK_ICON);
+        inventory.setItem(CANCEL_SLOT, CANCEL_ICON);
         inventory.setItem(REMOVE_ICON_SLOT, REMOVE_ICON_ICON);
         inventory.setItem(SAVE_SLOT, SAVE_ICON);
     }
@@ -73,7 +73,7 @@ public class EditIconWindow implements GUIWindow {
     @Override
     public void onInventoryClick(InventoryClickEvent event) {
         if (GUIUtils.isMainInventory(event.getRawSlot()) && event.getClick() == ClickType.LEFT) {
-            if (event.getSlot() == BACK_SLOT) {
+            if (event.getSlot() == CANCEL_SLOT) {
                 guiPlayer.popWindow();
             }
             else if (event.getSlot() == REMOVE_ICON_SLOT) {
